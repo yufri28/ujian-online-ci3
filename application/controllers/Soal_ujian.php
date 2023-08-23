@@ -8,7 +8,7 @@ class soal_ujian extends CI_Controller {
 		parent::__construct();
 		if ($this->session->userdata('status') !='admin_login') {
 			if ($this->session->userdata('status') !='guru_login'){
-				redirect('auth');
+			redirect('auth');
 			}
 		}
 		$this->load->model('m_soal');
