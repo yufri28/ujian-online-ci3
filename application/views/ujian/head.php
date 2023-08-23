@@ -39,24 +39,5 @@
     <!-- iCheck for checkboxes and radio inputs -->
     <link rel="stylesheet" href="<?php echo base_url()?>assets/plugins/iCheck/all.css">
 
-
-    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-  <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-  <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-  <![endif]-->
-
     <!-- Google Font -->
     <link rel="stylesheet" href="<?php echo base_url()?>assets/dist/css/css.css">
-
-    <!-- pagination -->
-    <script src="<?php echo base_url()?>assets/plugins/jquery-ui/external/jquery/jquery.js"></script>
-    <!-- <link rel="stylesheet" href="<?php echo base_url()?>assets/plugins/jquery-ui/jquery-ui.css">
-    <script src="<?php echo base_url()?>assets/plugins/jQueryUI/jquery-ui.js"></script>
-    <script src="<?php echo base_url()?>assets/plugins/jQueryUI/jquery-ui.min.js"></script> -->
-    <link rel="stylesheet" href="<?php echo base_url()?>assets/plugins/pagination/dist/pagination.css">
-    <script src="<?php echo base_url()?>assets/plugins/pagination/dist/pagination.js"></script>
-
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
-    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>

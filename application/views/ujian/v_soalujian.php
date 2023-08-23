@@ -17,8 +17,62 @@ $this->load->view('ujian/head');
     font-weight: bolder;
 }
 
-.question {
+.hidden {
     display: none;
+}
+
+.pagination-container {
+    width: calc(100% - 2rem);
+    display: flex;
+    align-items: center;
+    /* position: absolute; */
+    bottom: 0;
+    padding: 1rem 0;
+    justify-content: center;
+}
+
+li {
+    list-style: none;
+    margin-left: -35px;
+}
+
+.pagination-number,
+.pagination-button {
+    font-size: 1.1rem;
+    background-color: transparent;
+    border: none;
+    margin: 0.25rem 0.25rem;
+    cursor: pointer;
+    /* height: 2.5rem;
+    width: 2.5rem; */
+    border-radius: 0.2rem;
+}
+
+.pagination-number:hover,
+.pagination-button:not(.disabled):hover {
+    background: #fff;
+}
+
+.pagination-number.active {
+    color: #fff;
+    background: #0085b6;
+}
+
+#save-button {
+    color: #fff;
+    background: #0085b6;
+    font-size: 1.1rem;
+    border-radius: 0.2rem;
+}
+
+
+label {
+    font-weight: normal;
+}
+
+label,
+input {
+    cursor: pointer;
 }
 </style>
 <?php
@@ -61,138 +115,205 @@ if(isset($_SESSION["waktu_start"])){
                         <h3 class="box-title">Soal Ujian</h3>
                     </center>
                 </div><!-- /.box-header -->
-                <div class="box-body" style="overflow-y: scroll; height: 100%;">
+                <div class="box-body" style="overflow-y: scroll; height: 75vh;">
                     <form id="formSoal" role="form" action="<?php echo base_url(); ?>ruang_ujian/jawab_aksi"
                         method="post" onsubmit="return confirm('Anda Yakin ?')">
 
                         <input type="hidden" name="id_peserta" value="<?php echo $id['id_peserta']; ?>">
                         <input type="hidden" id="total_soal" name="jumlah_soal" value="<?php echo $total_soal; ?>">
 
-                        <div id="list">
+                        <ul id="paginated-list" data-current-page="1" aria-live="polite">
                             <?php
                             $i = 0; 
                             $no = 0;
                             foreach ($soal as $s) {
                                 $no++; 
                             ?>
-                            <div class="question" data-page="<?= $no < 11 ? 1:2;?>">
+                            <li>
                                 <div class="form-group">
                                     <table class="table table-bordered table-striped">
                                         <tbody>
                                             <tr>
                                                 <td width="1%"><?php echo $no; ?>.</td>
-                                                <td><?php echo $s->pertanyaan; ?>
+                                                <td>
+                                                    <?php echo $s->pertanyaan; ?><br>
                                                     <input type='hidden' name='soal[]'
                                                         value='<?php echo $s->id_soal_ujian; ?>' />
-                                                    <input type="radio" name="jawaban[<?php echo $s->id_soal_ujian; ?>]"
-                                                        value="A" required /> <?php echo $s->a; ?><br>
-                                                    <input type="radio" name="jawaban[<?php echo $s->id_soal_ujian; ?>]"
-                                                        value="B" required /> <?php echo $s->b; ?><br>
-                                                    <input type="radio" name="jawaban[<?php echo $s->id_soal_ujian; ?>]"
-                                                        value="C" required /> <?php echo $s->c; ?><br>
-                                                    <input type="radio" name="jawaban[<?php echo $s->id_soal_ujian; ?>]"
-                                                        value="D" required /> <?php echo $s->d; ?><br>
-                                                    <input type="radio" name="jawaban[<?php echo $s->id_soal_ujian; ?>]"
-                                                        value="E" required /> <?php echo $s->e; ?>
+                                                    <label>
+                                                        <input type="radio"
+                                                            name="jawaban[<?php echo $s->id_soal_ujian; ?>]" value="A"
+                                                            required /> <?php echo $s->a; ?>
+                                                    </label><br>
+                                                    <label>
+                                                        <input type="radio"
+                                                            name="jawaban[<?php echo $s->id_soal_ujian; ?>]" value="B"
+                                                            required /> <?php echo $s->b; ?>
+                                                    </label><br>
+                                                    <label>
+                                                        <input type="radio"
+                                                            name="jawaban[<?php echo $s->id_soal_ujian; ?>]" value="C"
+                                                            required /> <?php echo $s->c; ?>
+                                                    </label><br>
+                                                    <label>
+                                                        <input type="radio"
+                                                            name="jawaban[<?php echo $s->id_soal_ujian; ?>]" value="D"
+                                                            required /> <?php echo $s->d; ?>
+                                                    </label><br>
+                                                    <label>
+                                                        <input type="radio"
+                                                            name="jawaban[<?php echo $s->id_soal_ujian; ?>]" value="E"
+                                                            required /> <?php echo $s->e; ?>
+                                                    </label>
                                                 </td>
                                             </tr>
 
                                         </tbody>
                                     </table>
-
                                 </div>
-                            </div>
+                            </li>
                             <?php } ?>
-                        </div>
-
+                        </ul>
+                        <button type="submit" id="save-button"
+                            class="btn btn-primary btn-flat pull-right">Selesai</button>
                     </form>
                 </div>
                 <div class="box-footer">
                 </div>
-            </div><!-- /.box-body -->
-            <div id="pagination">
-                <button id="nextBtn" class="btn btn-info btn-flat pull-right">Selanjutnya</button>
-                <button id="prevBtn" class="btn btn-info btn-flat pull-right">Sebelumnya</button>
-                <!-- <button type="submit" class="btn btn-primary btn-flat pull-right">Simpan</button> -->
-                <div id="data-container"></div>
-                <div id="pagination-container"></div>
             </div>
-            <ul class="listPage">
-
-            </ul>
+            <nav class="pagination-container">
+                <button class="pagination-button" id="prev-button" aria-label="Previous page" title="Previous page">
+                    Sebelumnya
+                </button>
+                <div id="pagination-numbers">
+                </div>
+                <button class="pagination-button" id="next-button" aria-label="Next page" title="Next page">
+                    Selanjutnya
+                </button>
+            </nav>
         </div>
     </div>
-    </div>
-
-
-
-
-</section><!-- /.content -->
-
+</section>
 <?php
 $this->load->view('ujian/js');
 ?>
-<script>
-const questions = document.querySelectorAll('.question');
-const prevBtn = document.getElementById('prevBtn');
-const nextBtn = document.getElementById('nextBtn');
-const total_soal = document.getElementById('total_soal').value;
-const numPage = total_soal / 3;
 
+<script type="text/javascript">
+const paginationNumbers = document.getElementById("pagination-numbers");
+const paginatedList = document.getElementById("paginated-list");
+const listItems = paginatedList.querySelectorAll("li");
+const nextButton = document.getElementById("next-button");
+const prevButton = document.getElementById("prev-button");
+const saveButton = document.getElementById("save-button");
+
+const paginationLimit = 10;
+const pageCount = Math.ceil(listItems.length / paginationLimit);
 let currentPage = 1;
 
-function showPage(pageNumber) {
-    questions.forEach(question => {
-        if (question.getAttribute('data-page') === pageNumber.toString()) {
-            question.style.display = 'block';
-        } else {
-            question.style.display = 'none';
+const disableButton = (button) => {
+    button.classList.add("disabled");
+    button.setAttribute("disabled", true);
+};
+
+const enableButton = (button) => {
+    button.classList.remove("disabled");
+    button.removeAttribute("disabled");
+};
+
+const hiddenButton = () => {
+    saveButton.style.display = "none";
+}
+
+const showButton = () => {
+    saveButton.style.display = "block";
+}
+
+
+const handlePageButtonsStatus = () => {
+    if (currentPage === 1) {
+        disableButton(prevButton);
+    } else {
+        enableButton(prevButton);
+    }
+
+    if (pageCount === currentPage) {
+        disableButton(nextButton);
+    } else {
+        enableButton(nextButton);
+    }
+
+    if (pageCount === currentPage) {
+        showButton();
+    } else {
+        hiddenButton();
+    }
+};
+
+const handleActivePageNumber = () => {
+    document.querySelectorAll(".pagination-number").forEach((button) => {
+        button.classList.remove("active");
+        const pageIndex = Number(button.getAttribute("page-index"));
+        if (pageIndex == currentPage) {
+            button.classList.add("active");
         }
     });
-}
+};
 
-function updateButtons() {
-    prevBtn.disabled = currentPage === 1;
-    nextBtn.disabled = currentPage === numPage;
-}
+const appendPageNumber = (index) => {
+    const pageNumber = document.createElement("button");
+    pageNumber.className = "pagination-number";
+    pageNumber.innerHTML = index;
+    pageNumber.setAttribute("page-index", index);
+    pageNumber.setAttribute("aria-label", "Page " + index);
 
-prevBtn.addEventListener('click', () => {
-    if (currentPage > 1) {
-        currentPage--;
-        showPage(currentPage);
-        updateButtons();
+    paginationNumbers.appendChild(pageNumber);
+};
+
+const getPaginationNumbers = () => {
+    for (let i = 1; i <= pageCount; i++) {
+        appendPageNumber(i);
     }
+};
+
+const setCurrentPage = (pageNum) => {
+    currentPage = pageNum;
+
+    handleActivePageNumber();
+    handlePageButtonsStatus();
+
+    const prevRange = (pageNum - 1) * paginationLimit;
+    const currRange = pageNum * paginationLimit;
+
+    listItems.forEach((item, index) => {
+        item.classList.add("hidden");
+        if (index >= prevRange && index < currRange) {
+            item.classList.remove("hidden");
+        }
+    });
+};
+
+window.addEventListener("load", () => {
+    getPaginationNumbers();
+    setCurrentPage(1);
+
+    prevButton.addEventListener("click", () => {
+        setCurrentPage(currentPage - 1);
+    });
+
+    nextButton.addEventListener("click", () => {
+        setCurrentPage(currentPage + 1);
+    });
+
+    document.querySelectorAll(".pagination-number").forEach((button) => {
+        const pageIndex = Number(button.getAttribute("page-index"));
+
+        if (pageIndex) {
+            button.addEventListener("click", () => {
+                setCurrentPage(pageIndex);
+            });
+        }
+    });
 });
 
-nextBtn.addEventListener('click', () => {
-    if (currentPage < numPage) {
-        currentPage++;
-        showPage(currentPage);
-        updateButtons();
-    }
-});
-
-showPage(currentPage);
-updateButtons();
-</script>
-<script type="text/javascript">
-// var countDownDate = new Date("").getTime();
-// var x = setInterval(function() {
-//     var now = new Date().getTime();
-//     var distance = countDownDate - now;
-//     var days = Math.floor(distance / (1000 * 60 * 60 * 24));
-//     var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-//     var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-//     var seconds = Math.floor((distance % (1000 * 60)) / 1000);
-//     hours = hours < 10 ? "0" + hours : hours;
-//     minutes = minutes < 10 ? "0" + minutes : minutes;
-//     seconds = seconds < 10 ? "0" + seconds : seconds;
-//     document.getElementById("counter").innerHTML = hours + ":" + minutes + ":" + seconds;
-//     if (distance < 0) {
-//         document.getElementById("counter").innerHTML = "WAKTU UJIAN HABIS";
-//         document.getElementById("formSoal").submit();
-//     }
-// }, 1000);
 function waktuHabis() {
     alert('Waktu Anda telah habis, Jawaban anda akan disimpan secara otomatis.');
     var formSoal = document.getElementById("formSoal");
