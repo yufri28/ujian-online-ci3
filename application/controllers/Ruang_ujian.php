@@ -14,7 +14,7 @@ class Ruang_ujian extends CI_Controller
 	public function soal()
 	{
 		$id_peserta = $this->uri->segment(3);		
-		$id = $this->db->query('SELECT * FROM tb_peserta tp JOIN tb_siswa ts ON tp.id_siswa=ts.id_siswa WHERE id_peserta="' . $id_peserta . '"  ')->row_array();
+		$id = $this->db->query('SELECT * FROM tb_peserta tp JOIN tb_siswa ts ON tp.id_siswa=ts.id_siswa WHERE id_peserta="' . $id_peserta . '"')->row_array();
 		$id_mata_pelajaran = $id['id_matapelajaran'];
 		$id_kelas = $id['id_kelas'];
 		$soal_ujian = $this->db->query("SELECT * FROM tb_soal_ujian WHERE id_matapelajaran='$id_mata_pelajaran' AND id_kelas='$id_kelas' ORDER BY RAND()");
@@ -83,7 +83,7 @@ class Ruang_ujian extends CI_Controller
 			'salah' => $salah,
 			'status_ujian' => 2,
 			'status_ujian_ujian' => 2,
-			'nilai' => $total_nilai
+			'nilai' => round($total_nilai, 2)
 		);
 		$this->m_data->UpdateNilai2($where, $data, 'tb_peserta');
 		redirect(base_url('jadwal_ujian'));
