@@ -10,6 +10,8 @@ class guru extends CI_Controller {
 			redirect(base_url('auth'));
 		}
 
+		$this->load->helper('cek_username_helper');
+
 	}
 
 	public function index()
@@ -25,9 +27,10 @@ class guru extends CI_Controller {
 		$username	= htmlspecialchars($this->input->post('username'));
 		$password	= htmlspecialchars($this->input->post('password'));
 
-		$username_siswa = $this->db->get_where('tb_siswa', ['username' => $username])->row_array();
+		$result_guru = cek_username($username);
+		$result_siswa = cek_username($username); 
 
-		if($username_siswa){
+		if($result_guru || $result_siswa){
 			$this->session->set_flashdata('message', '<div class="alert alert-danger alert-message"><i class="icon fa fa-times"></i><b>Maaf ! <br></b> Username sudah digunakan</div>');
 		}else{
 			$data = array(
@@ -36,8 +39,8 @@ class guru extends CI_Controller {
 				'username'=>$username,
 				'password'=> password_hash($password, PASSWORD_DEFAULT),
 			);
-	
-			if(!$this->m_data->insert_data($data, 'tb_guru')){
+
+			if($this->m_data->insert_data($data, 'tb_guru')){
 				$this->session->set_flashdata('message', '<div class="alert alert-success alert-message"><i class="icon fa fa-check"></i><b>Selamat ! <br></b> Anda telah berhasil menambahkan data guru</div>');
 			}else{
 				$this->session->set_flashdata('message', '<div class="alert alert-danger alert-message"><i class="icon fa fa-times"></i><b>Maaf ! <br></b> Data gagal ditambahkan</div>');
@@ -75,6 +78,9 @@ class guru extends CI_Controller {
 		$username	= htmlspecialchars($this->input->post('username'));
 		$password	= htmlspecialchars($this->input->post('password'));
 
+		$result_guru = cek_username($username);
+		$result_siswa = cek_username($username); 
+		
 		if($password != ''){
 			$where = array('id_guru'=>$id);		
 			$data = array(
@@ -89,12 +95,16 @@ class guru extends CI_Controller {
 							'username'=> $username,
 						);
 		}
-		
-		if(!$this->m_data->update_data($where,$data,'tb_guru')){
-			$this->session->set_flashdata('message', '<div class="alert alert-success alert-message"><i class="icon fa fa-check"></i><b>Selamat ! <br></b> Anda telah berhasil mengupdate data guru</div>');
+		if($result_guru || $result_siswa){
+			$this->session->set_flashdata('message', '<div class="alert alert-danger alert-message"><i class="icon fa fa-times"></i><b>Maaf ! <br></b> Username sudah digunakan</div>');
 		}else{
-			$this->session->set_flashdata('message', '<div class="alert alert-danger alert-message"><i class="icon fa fa-times"></i><b>Maaf ! <br></b> Data gagal diupdate</div>');
+			$this->m_data->update_data($where, $data, 'tb_guru');
 		}
+		// if(!$this->m_data->update_data($where,$data,'tb_guru')){
+		// 	$this->session->set_flashdata('message', '<div class="alert alert-success alert-message"><i class="icon fa fa-check"></i><b>Selamat ! <br></b> Anda telah berhasil mengupdate data guru</div>');
+		// }else{
+		// 	$this->session->set_flashdata('message', '<div class="alert alert-danger alert-message"><i class="icon fa fa-times"></i><b>Maaf ! <br></b> Data gagal diupdate</div>');
+		// }
 		
 		redirect(base_url('guru'));
 	}

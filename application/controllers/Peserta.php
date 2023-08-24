@@ -7,7 +7,9 @@ class peserta extends CI_Controller
 	{
 		parent::__construct();
 		if ($this->session->userdata('status') != 'admin_login') {
-			redirect(base_url('auth'));
+			if ($this->session->userdata('status') != 'guru_login') {
+				redirect(base_url('auth'));
+			}
 		}
 		$this->load->model('m_peserta');
 		

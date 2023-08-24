@@ -7,7 +7,9 @@ class peserta_tambah extends CI_Controller
 	{
 		parent::__construct();
 		if ($this->session->userdata('status') !='admin_login') {
-			redirect(base_url().'auth?alert=belum_login');
+			if ($this->session->userdata('status') != 'guru_login') {
+				redirect(base_url().'auth?alert=belum_login');
+			}	
 		}
 	}
 

@@ -22,11 +22,11 @@ class siswa extends CI_Controller
 
 	public function create()
 	{
-		$this->form_validation->set_rules('nama', 'Nama', 'required|trim', ['required' => 'Nama harus di isi!']);
-		$this->form_validation->set_rules('nis', 'nis', 'required|trim|is_unique[tb_siswa.nis]', ['required' => 'nis harus di isi!']);
-		$this->form_validation->set_rules('kelas', 'Kelas', 'required|trim', ['required' => 'Kelas harus di pilih!']);
-		$this->form_validation->set_rules('username', 'Username', 'required|trim|is_unique[tb_siswa.username]', ['required' => 'Username harus di isi!']);
-		$this->form_validation->set_rules('password', 'Password', 'required|trim', ['required' => 'Password harus di isi!']);
+		// $this->form_validation->set_rules('nama', 'Nama', 'required|trim', ['required' => 'Nama harus di isi!']);
+		// $this->form_validation->set_rules('nis', 'nis', 'required|trim|is_unique[tb_siswa.nis]', ['required' => 'nis harus di isi!']);
+		// $this->form_validation->set_rules('kelas', 'Kelas', 'required|trim', ['required' => 'Kelas harus di pilih!']);
+		// $this->form_validation->set_rules('username', 'Username', 'required|trim|is_unique[tb_siswa.username]', ['required' => 'Username harus di isi!']);
+		// $this->form_validation->set_rules('password', 'Password', 'required|trim', ['required' => 'Password harus di isi!']);
 
 		$nama 		= htmlspecialchars($this->input->post('nama', TRUE));
 		$nis		= htmlspecialchars($this->input->post('nis', TRUE));
@@ -34,22 +34,43 @@ class siswa extends CI_Controller
 		$username	= htmlspecialchars($this->input->post('username', TRUE));
 		$password	= htmlspecialchars($this->input->post('password', TRUE));
 
-		if ($this->form_validation->run() != false) {
-			$data = array(
-				'nama_siswa' => $nama,
-				'nis' => $nis,
-				'id_kelas' => $kelas,
-				'username' => $username,
-				'password' => password_hash($password, PASSWORD_DEFAULT),
-			);
 
-			$this->m_data->insert_data($data, 'tb_siswa');
-			$this->session->set_flashdata('message', '<div class="alert alert-success alert-message"><i class="icon fa fa-check"></i><b>Selamat ! <br></b> Anda telah berhasil menambahkan data siswa</div>');
-			redirect(base_url('siswa'));
-		} else {
-			$data['kelas'] = $this->m_data->get_data('tb_kelas')->result();
-			$this->load->view('admin/v_siswa_tambah', $data);
+		$result_guru = cek_username($username);
+		$result_siswa = cek_username($username); 
+
+		if($result_guru || $result_siswa){
+			$this->session->set_flashdata('message', '<div class="alert alert-danger alert-message"><i class="icon fa fa-times"></i><b>Maaf ! <br></b> Username sudah digunakan</div>');
+		}else{
+			$data = array(
+				'id_siswa'=>$nik,
+				'nama_siswa'=>$nama,
+				'username'=>$username,
+				'password'=> password_hash($password, PASSWORD_DEFAULT),
+			);
+			if($this->m_data->insert_data($data, 'tb_siswa')){
+				$this->session->set_flashdata('message', '<div class="alert alert-success alert-message"><i class="icon fa fa-check"></i><b>Selamat ! <br></b> Anda telah berhasil menambahkan data siswa</div>');
+			}else{
+				$this->session->set_flashdata('message', '<div class="alert alert-danger alert-message"><i class="icon fa fa-times"></i><b>Maaf ! <br></b> Data gagal ditambahkan</div>');
+			}
 		}
+		redirect(base_url('siswa'));
+
+		// if ($this->form_validation->run() != false) {
+		// 	$data = array(
+		// 		'nama_siswa' => $nama,
+		// 		'nis' => $nis,
+		// 		'id_kelas' => $kelas,
+		// 		'username' => $username,
+		// 		'password' => password_hash($password, PASSWORD_DEFAULT),
+		// 	);
+
+		// 	$this->m_data->insert_data($data, 'tb_siswa');
+		// 	$this->session->set_flashdata('message', '<div class="alert alert-success alert-message"><i class="icon fa fa-check"></i><b>Selamat ! <br></b> Anda telah berhasil menambahkan data siswa</div>');
+		// 	redirect(base_url('siswa'));
+		// } else {
+		// 	$data['kelas'] = $this->m_data->get_data('tb_kelas')->result();
+		// 	$this->load->view('admin/v_siswa_tambah', $data);
+		// }
 	}
 
 	public function edit($id)
@@ -68,6 +89,9 @@ class siswa extends CI_Controller
 		$username	= $this->input->post('username');
 		$password	= $this->input->post('password');
 
+		$result_guru = cek_username($username);
+		$result_siswa = cek_username($username); 
+
 		$where = array('id_siswa' => $id);
 
 		if ($password == "") {
@@ -77,7 +101,6 @@ class siswa extends CI_Controller
 				'id_kelas' => $kelas,
 				'username' => $username
 			);
-			$this->m_data->update_data($where, $data, 'tb_siswa');
 		} else { 
 			$data = array(
 				'nama_siswa' => $nama,
@@ -86,9 +109,13 @@ class siswa extends CI_Controller
 				'username' 	 => $username,
 				'password' 	 => password_hash($password, PASSWORD_DEFAULT),
 			);
+			
+		}
+		if($result_guru || $result_siswa){
+			$this->session->set_flashdata('message', '<div class="alert alert-danger alert-message"><i class="icon fa fa-times"></i><b>Maaf ! <br></b> Username sudah digunakan</div>');
+		}else{
 			$this->m_data->update_data($where, $data, 'tb_siswa');
 		}
-		$this->session->set_flashdata('message', '<div class="alert alert-success alert-message"><i class="icon fa fa-check"></i><b>Selamat ! <br></b> Anda telah berhasil mengupdate data siswa</div>');
 		redirect(base_url('siswa'));
 	}
 
