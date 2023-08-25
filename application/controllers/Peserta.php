@@ -47,7 +47,7 @@ class peserta extends CI_Controller
 			'id_peserta' => $id
 		);
 		$this->m_data->delete_data($where, 'tb_peserta');
-		$this->session->set_flashdata('message', '<div class="alert alert-danger alert-message"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button><h4><i class="icon fa fa-check"></i> Data Peserta Ujian berhasil di hapus !</h4></div>');
+		$this->session->set_flashdata('message', '<div class="alert alert-success alert-message"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button><h4><i class="icon fa fa-check"></i> Data Peserta Ujian berhasil di hapus !</h4></div>');
 		redirect(base_url('peserta'));
 	}
 
@@ -67,12 +67,14 @@ class peserta extends CI_Controller
 		$mapel 			= $this->input->post('mapel');
 		$tanggal		= $this->input->post('tanggal');
 		$jam			= $this->input->post('jam');
+		$tanggal_deadline	= $this->input->post('tanggal_deadline');
+		$jam_deadline		= $this->input->post('jam_deadline');
 		$durasi_ujian		= $this->input->post('durasi_ujian');
 		$jenis			= $this->input->post('jenis');
 		$timer_ujian 		= $durasi_ujian*60;
 		$where  = array('id_peserta' => $this->input->post('id'));
 
-		if ($peserta == '' || $mapel == '' || $tanggal == '' || $jam == '' || $durasi_ujian == '' || $jenis == '') {
+		if ($peserta == '' || $mapel == '' || $tanggal == '' || $jam == '' || $tanggal_deadline == '' || $jam_deadline == '' || $durasi_ujian == '' || $jenis == '') {
 			
 			$this->session->set_flashdata('message', '<div class="alert alert-danger alert-message"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button><h4><i class="icon fa fa-check"></i> semua field harus diisi semua !</h4></div>');
 			redirect(base_url('peserta'));
@@ -83,9 +85,11 @@ class peserta extends CI_Controller
 				'id_jenis_ujian'	=> $jenis,
 				'tanggal_ujian'		=> $tanggal,
 				'jam_ujian'			=> $jam,
-				'durasi_ujian'			=> $durasi_ujian,
-				'timer_ujian'			=> $timer_ujian,
-				'status_ujian'			=> 1
+				'tanggal_deadline'	=> $tanggal_deadline,
+				'jam_deadline'		=> $jam_deadline,
+				'durasi_ujian'		=> $durasi_ujian,
+				'timer_ujian'		=> $timer_ujian,
+				'status_ujian'		=> 1
 				
 			);
 
