@@ -33,9 +33,9 @@ date_default_timezone_set('Asia/Jakarta');
                                 <th width="1%">No</th>
                                 <th>Kode </th>
                                 <th>Mata Pelajaran</th>
-                                <th>Waktu Mulai Ujian</th>
+                                <th>Mulai Ujian</th>
                                 <th>Durasi </th>
-                                <th>Waktu Selesai Ujian</th>
+                                <th>Deadline</th>
                                 <th>Sisa Waktu</th>
                                 <th>Jenis Ujian</th>
                                 <th>Status</th>
@@ -54,9 +54,33 @@ date_default_timezone_set('Asia/Jakarta');
                                 <td><?php echo date('d-m-Y', strtotime($d->tanggal_ujian)); ?> |
                                     <?php echo date('H:i:s', strtotime($d->jam_ujian)); ?></td>
                                 <td><?php echo $d->durasi_ujian; ?> Menit</td>
-                                <td><?php echo date('d-m-Y', strtotime($d->tanggal_ujian)); ?> |
-                                    <?php echo date('H:i:s', strtotime($d->jam_ujian)); ?></td>
-                                <td>2 hari 3 jam 34 menit</td>
+                                <td><?php echo date('d-m-Y', strtotime($d->tanggal_deadline)); ?> |
+                                    <?php echo date('H:i:s', strtotime($d->jam_deadline)); ?></td>
+                                <?php
+                                
+                                $awal = $d->tanggal_ujian . ' ' . $d->jam_ujian;
+                                $akhir = $d->tanggal_deadline . ' ' . $d->jam_deadline;
+                                $formatTanggalJam = 'Y-m-d H:i';
+                                
+                                $waktuAwal = strtotime($awal);
+                                $waktuAkhir = strtotime($akhir);
+                                
+
+                                $selisih = $waktuAkhir - $waktuAwal;
+                                $satuMinggu = 7 * 24 * 60 * 60;
+                                if ($d->status_ujian == 1) {
+                                    if ($selisih >= $satuMinggu) {
+                                        echo "Waktu habis!";
+                                    } 
+                                }
+                                else {
+                                    $sisaDetik = $satuMinggu - $selisih;
+                                    $sisaHari = floor($sisaDetik / (24 * 60 * 60));
+                                    $sisaJam = floor(($sisaDetik - ($sisaHari * 24 * 60 * 60)) / 3600);
+                                    $sisaMenit = floor(($sisaDetik - ($sisaHari * 24 * 60 * 60) - ($sisaJam * 3600)) / 60);
+                                }
+                                ?>
+                                <td><?="$sisaHari hari : $sisaJam jam : $sisaMenit menit";?></td>
                                 <td><?php echo $d->jenis_ujian; ?></td>
                                 <td>
                                     <?php if ($d->status_ujian == 0) {
@@ -64,31 +88,25 @@ date_default_timezone_set('Asia/Jakarta');
                                             } else if ($d->status_ujian == 2) {
                                                 echo "<span> Sudah Mengikuti Ujian </span>";
                                             } else if ($d->status_ujian == 1) {
-                                                $awal = strtotime('2023-08-17 9:00:00'); 
-                                                $sekarang = time();
-                                                
-                                                $waktuAwal = strtotime('2023-08-24 10:00:00'); 
-                                                $waktuAkhir = strtotime('2023-08-31 10:00:00');
-
-                                                $selisih = $waktuAkhir - $waktuAwal;
-                                                $satuMinggu = 7 * 24 * 60 * 60;
-
-                                                if ($selisih >= $satuMinggu) {
-                                                    echo "Waktu habis!";
-                                                } else {
-                                                    $sisaHari = floor(($satuMinggu - $selisih) / (24 * 60 * 60));
-                                                    echo "Sisa waktu: $sisaHari hari.";
-                                                }
-
                                                 if ($d->status_ujian == 1) {
-                                                    if (Date('d-m-Y', strtotime($d->tanggal_ujian)) == Date('d-m-Y') && Date('H:i:s', strtotime($d->jam_ujian)) <= Date('H:i:s')) {
+                                                    if ($selisih < $satuMinggu) {
                                                         echo "<a href='" . 'ruang_ujian/soal/' . "$d->id_peserta' class='btn btn-xs btn-success';'>Mulai Ujian</a>";
-                                                    } else if (Date('d-m-Y', strtotime($d->tanggal_ujian)) == Date('d-m-Y') && Date('H:i:s', strtotime($d->jam_ujian)) <= Date('H:i:s')) {
+                                                    } else if ($selisih >= $satuMinggu) {
                                                         echo "Waktu Ujian Habis";
                                                     } else {
                                                         echo "Tuggu Waktu Ujian";
                                                     }
                                                 }
+                                                
+                                                // if ($d->status_ujian == 1) {
+                                                //     if (Date('d-m-Y', strtotime($d->tanggal_ujian)) == Date('d-m-Y') && Date('H:i:s', strtotime($d->jam_ujian)) <= Date('H:i:s')) {
+                                                //         echo "<a href='" . 'ruang_ujian/soal/' . "$d->id_peserta' class='btn btn-xs btn-success';'>Mulai Ujian</a>";
+                                                //     } else if (Date('d-m-Y', strtotime($d->tanggal_ujian)) == Date('d-m-Y') && Date('H:i:s', strtotime($d->jam_ujian)) <= Date('H:i:s')) {
+                                                //         echo "Waktu Ujian Habis";
+                                                //     } else {
+                                                //         echo "Tuggu Waktu Ujian";
+                                                //     }
+                                                // }
                                             }
                                             ?>
 

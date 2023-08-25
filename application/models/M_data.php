@@ -51,7 +51,6 @@ class M_data extends CI_Model
 	public function insert_multiple()
 	{
 		$durasi_ujian		= $this->input->post('durasi_ujian');
-				
 		$timer_ujian 		= $durasi_ujian*60;
 
 		$entri = array();
@@ -63,12 +62,15 @@ class M_data extends CI_Model
 				'id_jenis_ujian'=> $this->input->post('jenis_ujian'),
 				'tanggal_ujian' => $this->input->post('tanggal'),
 				'jam_ujian' 	=> $this->input->post('jam'),
+				'tanggal_deadline' => $this->input->post('tanggal_deadline'),
+				'jam_deadline' 	=> $this->input->post('jam_deadline'),
 				'durasi_ujian' 	=> $durasi_ujian,
 				'timer_ujian' 	=> $timer_ujian,
 				'status_ujian' 	=> 1
 
 			);
 		}
+		
 		//return $entri;
 		// echo "<pre>"; print_r($timer_ujian);die;
 		$this->db->insert_batch('tb_peserta', $entri);
