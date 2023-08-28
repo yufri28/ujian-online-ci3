@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Waktu pembuatan: 23 Agu 2023 pada 18.50
+-- Waktu pembuatan: 28 Agu 2023 pada 05.27
 -- Versi server: 10.4.27-MariaDB
 -- Versi PHP: 7.4.33
 
@@ -83,7 +83,29 @@ INSERT INTO `tb_jawaban` (`id_jawaban`, `id_peserta`, `id_soal_ujian`, `jawaban`
 (42, 27, 21, 'D', '1'),
 (43, 27, 22, 'A', '1'),
 (44, 28, 27, 'A', '0'),
-(45, 29, 26, 'D', '0');
+(45, 29, 26, 'D', '0'),
+(46, 30, 35, 'B', '0'),
+(47, 30, 31, 'B', '1'),
+(48, 30, 32, 'A', '0'),
+(49, 30, 29, 'A', '0'),
+(50, 30, 27, 'A', '0'),
+(51, 30, 33, 'B', '0'),
+(52, 30, 30, 'C', '1'),
+(53, 30, 34, 'C', '0'),
+(54, 30, 26, 'C', '0'),
+(55, 30, 36, 'C', '0'),
+(56, 30, 28, 'C', '0'),
+(57, 31, 36, 'B', '1'),
+(58, 31, 26, 'C', '0'),
+(59, 31, 28, 'C', '0'),
+(60, 31, 31, 'C', '0'),
+(61, 31, 35, 'C', '1'),
+(62, 31, 30, 'C', '1'),
+(63, 31, 33, 'B', '0'),
+(64, 31, 27, 'C', '0'),
+(65, 31, 29, 'B', '1'),
+(66, 31, 32, 'B', '1'),
+(67, 31, 34, 'C', '0');
 
 -- --------------------------------------------------------
 
@@ -141,7 +163,8 @@ CREATE TABLE `tb_matapelajaran` (
 
 INSERT INTO `tb_matapelajaran` (`id_matapelajaran`, `kode_matapelajaran`, `nama_matapelajaran`) VALUES
 (27, 'MP3040', 'Data Mining'),
-(28, 'MP1243', 'Basis Data');
+(28, 'MP1243', 'Basis Data'),
+(30, '098767', 'dasdsadasdas');
 
 -- --------------------------------------------------------
 
@@ -156,6 +179,8 @@ CREATE TABLE `tb_peserta` (
   `id_jenis_ujian` int(11) NOT NULL,
   `tanggal_ujian` date NOT NULL,
   `jam_ujian` time NOT NULL,
+  `tanggal_deadline` date NOT NULL,
+  `jam_deadline` time NOT NULL,
   `durasi_ujian` int(11) NOT NULL,
   `timer_ujian` int(11) NOT NULL,
   `status_ujian` tinyint(1) NOT NULL,
@@ -169,12 +194,15 @@ CREATE TABLE `tb_peserta` (
 -- Dumping data untuk tabel `tb_peserta`
 --
 
-INSERT INTO `tb_peserta` (`id_peserta`, `id_matapelajaran`, `id_siswa`, `id_jenis_ujian`, `tanggal_ujian`, `jam_ujian`, `durasi_ujian`, `timer_ujian`, `status_ujian`, `status_ujian_ujian`, `benar`, `salah`, `nilai`) VALUES
-(27, 27, 15, 1, '2023-08-22', '08:00:00', 20, 1200, 2, 2, '2', '0', '100'),
-(28, 27, 17, 1, '2023-08-22', '12:45:00', 20, 1200, 2, 2, '0', '1', '0'),
-(29, 27, 15, 1, '2023-08-22', '12:45:00', 20, 1200, 2, 2, '0', '1', '0'),
-(30, 27, 17, 1, '2023-08-23', '08:45:00', 120, 7200, 1, 1, '', '', ''),
-(31, 27, 18, 1, '2023-08-22', '15:00:00', 20, 1200, 1, 0, '', '', '');
+INSERT INTO `tb_peserta` (`id_peserta`, `id_matapelajaran`, `id_siswa`, `id_jenis_ujian`, `tanggal_ujian`, `jam_ujian`, `tanggal_deadline`, `jam_deadline`, `durasi_ujian`, `timer_ujian`, `status_ujian`, `status_ujian_ujian`, `benar`, `salah`, `nilai`) VALUES
+(27, 27, 15, 1, '2023-08-22', '08:00:00', '0000-00-00', '00:00:00', 20, 1200, 2, 2, '2', '0', '100'),
+(28, 27, 17, 1, '2023-08-22', '12:45:00', '0000-00-00', '00:00:00', 20, 1200, 2, 2, '0', '1', '0'),
+(29, 27, 15, 1, '2023-08-22', '12:45:00', '0000-00-00', '00:00:00', 20, 1200, 2, 2, '0', '1', '0'),
+(30, 27, 17, 1, '2023-08-24', '08:45:00', '0000-00-00', '00:00:00', 120, 7200, 2, 2, '2', '9', '18.1818181'),
+(31, 27, 18, 1, '2023-08-25', '15:00:00', '2023-08-29', '08:00:00', 20, 1200, 2, 2, '5', '6', '45.45'),
+(33, 27, 18, 3, '2023-08-25', '08:00:00', '2023-08-30', '08:00:00', 120, 7200, 1, 1, '', '', ''),
+(34, 27, 18, 1, '2023-08-28', '08:00:00', '2023-08-28', '09:00:00', 20, 1200, 1, 0, '', '', ''),
+(35, 27, 18, 3, '2023-08-29', '09:00:00', '2023-08-30', '09:00:00', 20, 1200, 1, 0, '', '', '');
 
 -- --------------------------------------------------------
 
@@ -198,7 +226,10 @@ CREATE TABLE `tb_siswa` (
 INSERT INTO `tb_siswa` (`id_siswa`, `id_kelas`, `nama_siswa`, `nis`, `username`, `password`) VALUES
 (15, 7, 'Ridwan', 23232, 'Ridwan', '$2y$10$.2qIzSVvop5NuUtB3cd4IeqnXSj1lIDdvbfSS/TCTIrn6VvnFPl5S'),
 (17, 8, 'Genio', 332321, 'genio', '$2y$10$NEIywyoMgA.yuZKTtiKY6OX1x3iN7DzjrltSIJdYbMeL0PTLdBOCe'),
-(18, 8, 'Edw', 232114, 'Edw', '$2y$10$Uf52x2C6rtUtGBLiNdZOwuO573WrGtMqFPtTIVSIA5zUqZQ7HIKpm');
+(18, 8, 'Edw', 232114, 'Edw', '$2y$10$Uf52x2C6rtUtGBLiNdZOwuO573WrGtMqFPtTIVSIA5zUqZQ7HIKpm'),
+(19, 8, 'genio', 232123, 'genio', '$2y$10$zpnligeCV2oTYv3N3woRfef0E4/ySlgt1EDnXyW59YDI/NfUHOYvG'),
+(20, 7, 'genios', 232322, 'genios', '$2y$10$vuI9cHIpszjyFLlhEjlnoOLVBp2BbbsNqYM16AFKVcfB4O54VQLiC'),
+(21, 0, '', 0, '', '$2y$10$NfE5giHdSboXH9wUP77FU.A4Mb47mzPT78QTS62/6im7YOCXYsqLO');
 
 -- --------------------------------------------------------
 
@@ -320,7 +351,7 @@ ALTER TABLE `tb_admin`
 -- AUTO_INCREMENT untuk tabel `tb_jawaban`
 --
 ALTER TABLE `tb_jawaban`
-  MODIFY `id_jawaban` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=46;
+  MODIFY `id_jawaban` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=68;
 
 --
 -- AUTO_INCREMENT untuk tabel `tb_jenis_ujian`
@@ -338,19 +369,19 @@ ALTER TABLE `tb_kelas`
 -- AUTO_INCREMENT untuk tabel `tb_matapelajaran`
 --
 ALTER TABLE `tb_matapelajaran`
-  MODIFY `id_matapelajaran` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
+  MODIFY `id_matapelajaran` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
 
 --
 -- AUTO_INCREMENT untuk tabel `tb_peserta`
 --
 ALTER TABLE `tb_peserta`
-  MODIFY `id_peserta` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
+  MODIFY `id_peserta` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
 
 --
 -- AUTO_INCREMENT untuk tabel `tb_siswa`
 --
 ALTER TABLE `tb_siswa`
-  MODIFY `id_siswa` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `id_siswa` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 
 --
 -- AUTO_INCREMENT untuk tabel `tb_soal_ujian`
