@@ -35,8 +35,9 @@
               <li <?= $this->uri->segment(1) == 'siswa' ? 'class="active"' : '' ?>>
                   <a href="<?php echo base_url('siswa'); ?>"><i class="fa fa-circle-o"></i> Data Siswa</a>
               </li>
-              <li <?= $this->uri->segment(1) == 'soal_ujian' ? 'class="active"' : '' ?>>
-                  <a href="<?php echo base_url('soal_ujian'); ?>"><i class="fa fa-circle-o"></i> Kelola Soal Ujian</a>
+              <li <?= $this->uri->segment(1) == 'matapelajaran' ? 'class="active"' : '' ?>>
+                  <a href="<?php echo base_url('matapelajaran'); ?>"><i class="fa fa-circle-o"></i> Data Mata
+                      Pelajaran</a>
               </li>
               <li <?= $this->uri->segment(1) == 'peserta' ? 'class="active"' : '' ?>>
                   <a href="<?php echo base_url('peserta'); ?>"><i class="fa fa-circle-o"></i> Kelola Peserta Ujian</a>

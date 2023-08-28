@@ -13,7 +13,7 @@ class jadwal_ujian extends CI_Controller
 
 	public function index()
 	{
-		$data['peserta'] = $this->db->query('SELECT tb_peserta.id_peserta, tb_matapelajaran.kode_matapelajaran, tb_matapelajaran.nama_matapelajaran, tb_matapelajaran.id_matapelajaran, tb_siswa.nama_siswa, tb_siswa.nis, tanggal_ujian, jam_ujian, tanggal_deadline, jam_deadline, durasi_ujian, tb_jenis_ujian.jenis_ujian, status_ujian  FROM tb_peserta, tb_matapelajaran, tb_siswa, tb_jenis_ujian WHERE tb_peserta.id_jenis_ujian=tb_jenis_ujian.id_jenis_ujian AND tb_peserta.id_matapelajaran=tb_matapelajaran.id_matapelajaran AND tb_peserta.id_siswa=tb_siswa.id_siswa AND tb_siswa.nama_siswa="' . $this->session->userdata('nama') . '" ')->result();
+		$data['peserta'] = $this->db->query('SELECT tb_peserta.id_peserta, tb_matapelajaran.kode_matapelajaran, tb_matapelajaran.nama_matapelajaran, tb_matapelajaran.id_matapelajaran, tb_siswa.nama_siswa, tb_siswa.nis, tanggal_ujian, jam_ujian, tanggal_deadline, jam_deadline, durasi_ujian, tb_jenis_ujian.jenis_ujian, status_ujian FROM tb_peserta, tb_matapelajaran, tb_siswa, tb_jenis_ujian WHERE tb_peserta.id_jenis_ujian=tb_jenis_ujian.id_jenis_ujian AND tb_peserta.id_matapelajaran=tb_matapelajaran.id_matapelajaran AND tb_peserta.id_siswa=tb_siswa.id_siswa AND tb_siswa.nama_siswa="' . $this->session->userdata('nama') . '" ')->result();
 		$this->load->view('siswa/v_jadwal_ujian', $data);
 	}
 }

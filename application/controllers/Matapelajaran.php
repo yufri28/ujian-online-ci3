@@ -39,7 +39,7 @@ class matapelajaran extends CI_Controller {
 					'id_matapelajaran'=>$id
 				);
 		$this->m_data->delete_data($where,'tb_matapelajaran');
-		$this->session->set_flashdata('message', '<div class="alert alert-danger alert-message"><i class="icon fa fa-check"></i><b>Selamat !<br></b> Anda telah berhasil menghapus data Mata Pelajaran</div>');
+		$this->session->set_flashdata('message', '<div class="alert alert-success alert-message"><i class="icon fa fa-check"></i><b>Selamat !<br></b> Anda telah berhasil menghapus data Mata Pelajaran</div>');
 		redirect(base_url('matapelajaran'));
 	}
 
